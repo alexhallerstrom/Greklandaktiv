@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rhodos Travel App</title>
+<title>Rhodos Ultra Travel App</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
@@ -22,31 +22,36 @@ header{
   background:linear-gradient(135deg,#2563eb,#38bdf8);
 }
 
+/* MAP */
 #map{
   height:40vh;
   width:100%;
 }
 
+/* GRID */
 .container{
   padding:12px;
   max-width:900px;
   margin:auto;
 }
 
-/* CARDS */
+.section-title{
+  margin:14px 0 8px;
+  opacity:.9;
+}
+
+/* CARD */
 .card{
   background:#111a2e;
   border-radius:16px;
   overflow:hidden;
   margin-bottom:12px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
   cursor:pointer;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
   transition:0.2s;
 }
 
-.card:hover{
-  transform:scale(1.02);
-}
+.card:hover{transform:scale(1.02);}
 
 .card img{
   width:100%;
@@ -54,14 +59,15 @@ header{
   object-fit:cover;
 }
 
-.card-content{
-  padding:12px;
-}
+.card-content{padding:12px;}
 
-.price{
-  color:#22c55e;
-  font-weight:600;
-  font-size:13px;
+.tag{
+  display:inline-block;
+  padding:4px 8px;
+  background:#1e40af;
+  border-radius:999px;
+  font-size:11px;
+  margin-top:6px;
 }
 
 /* MODAL */
@@ -72,23 +78,24 @@ header{
   display:none;
   justify-content:center;
   align-items:center;
+  z-index:999;
 }
 
 .modal-box{
   width:92%;
-  max-width:500px;
+  max-width:520px;
   background:#111a2e;
   border-radius:16px;
   overflow:hidden;
-  animation:pop 0.25s ease;
+  animation:pop .2s ease;
 }
 
 @keyframes pop{
-  from{transform:scale(0.9);opacity:0}
+  from{transform:scale(.9);opacity:0}
   to{transform:scale(1);opacity:1}
 }
 
-.modal-box img{
+.modal img{
   width:100%;
   height:180px;
   object-fit:cover;
@@ -102,7 +109,7 @@ header{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:6px;
-  margin:10px 0;
+  margin-top:10px;
 }
 
 .gallery img{
@@ -114,20 +121,19 @@ header{
 
 .btn{
   display:inline-block;
+  margin-top:10px;
   padding:10px;
   background:#2563eb;
   color:white;
   border-radius:10px;
   text-decoration:none;
-  margin-top:8px;
-  font-size:13px;
 }
 
 .close{
   position:absolute;
-  top:15px;
   right:20px;
-  font-size:22px;
+  top:15px;
+  font-size:20px;
   cursor:pointer;
 }
 </style>
@@ -136,65 +142,17 @@ header{
 <body>
 
 <header>
-<h2>🌴 Rhodos Travel App</h2>
-<p>Karta + klickbara platser + detaljer</p>
+<h2>🌍 Rhodos Ultra Travel App</h2>
+<p>Klicka på allt → full info + karta + bilder</p>
 </header>
 
 <div id="map"></div>
 
 <div class="container">
 
-<h3>🏖 Stränder</h3>
+<h3 class="section-title">🔥 Platser nära dig</h3>
 
-<div class="card" onclick="openPlace('Elli Beach','Central strand i Rhodos stad',[
-'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80',
-'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
-'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80'
-],36.4519,28.2220)">
-<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80">
-<div class="card-content">
-<h3>Elli Beach</h3>
-<p>Rhodos stad • strand + barer</p>
-</div>
-</div>
-
-<div class="card" onclick="openPlace('Anthony Quinn Bay','Snorkling och klippor',[
-'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80',
-'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
-'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1200&q=80'
-],36.3456,28.2312)">
-<img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80">
-<div class="card-content">
-<h3>Anthony Quinn Bay</h3>
-<p>Snorkling paradis</p>
-</div>
-</div>
-
-<h3>🍝 Restauranger</h3>
-
-<div class="card" onclick="openPlace('Gyros Faliraki','Billig street food',[
-'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=1200&q=80',
-'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1200&q=80',
-'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80'
-],36.3398,28.1996)">
-<img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=1200&q=80">
-<div class="card-content">
-<h3>Gyros Faliraki</h3>
-<p>3–6€ street food</p>
-</div>
-</div>
-
-<div class="card" onclick="openPlace('Sea View Taverna','Havsutsikt & grekisk mat',[
-'https://images.unsplash.com/photo-1541542684-4a1f7c0a3c8d?auto=format&fit=crop&w=1200&q=80',
-'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80',
-'https://images.unsplash.com/photo-1555992336-03a23c8b3d74?auto=format&fit=crop&w=1200&q=80'
-],36.2200,28.1500)">
-<img src="https://images.unsplash.com/photo-1541542684-4a1f7c0a3c8d?auto=format&fit=crop&w=1200&q=80">
-<div class="card-content">
-<h3>Sea View Taverna</h3>
-<p>Romantiskt middag</p>
-</div>
-</div>
+<div id="list"></div>
 
 </div>
 
@@ -202,14 +160,17 @@ header{
 <div class="modal" id="modal">
 <div class="modal-box">
 <div class="close" onclick="closeModal()">✖</div>
+
 <img id="mainimg">
+
 <div class="modal-body">
 <h2 id="title"></h2>
 <p id="desc"></p>
+<p id="meta"></p>
 
 <div class="gallery" id="gallery"></div>
 
-<a class="btn" id="maps">Öppna i Google Maps</a>
+<a class="btn" id="maps" target="_blank">📍 Öppna i Google Maps</a>
 </div>
 </div>
 </div>
@@ -218,45 +179,112 @@ header{
 
 <script>
 
+const places = [
+{
+name:"Elli Beach",
+desc:"Central strand i Rhodos stad med barer och solstolar",
+lat:36.4519,lng:28.2220,
+price:"Gratis / 10–20€ solstol",
+cat:"Strand",
+img:[
+"https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+"https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
+"https://images.unsplash.com/photo-1501785888041-af3ef285b470"
+]
+},
+
+{
+name:"Anthony Quinn Bay",
+desc:"Snorkling paradis med turkost vatten och klippor",
+lat:36.3456,lng:28.2312,
+price:"Gratis",
+cat:"Strand",
+img:[
+"https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
+"https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+"https://images.unsplash.com/photo-1470770903676-69b98201ea1c"
+]
+},
+
+{
+name:"Gyros Faliraki",
+desc:"Billig och autentisk grekisk street food",
+lat:36.3398,lng:28.1996,
+price:"3–6€",
+cat:"Mat",
+img:[
+"https://images.unsplash.com/photo-1600891964092-4316c288032e",
+"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38",
+"https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
+]
+},
+
+{
+name:"Sea View Taverna",
+desc:"Romantisk middag med utsikt över havet",
+lat:36.2200,lng:28.1500,
+price:"10–25€",
+cat:"Restaurang",
+img:[
+"https://images.unsplash.com/photo-1541542684-4a1f7c0a3c8d",
+"https://images.unsplash.com/photo-1414235077428-338989a2e8c0",
+"https://images.unsplash.com/photo-1555992336-03a23c8b3d74"
+]
+}
+];
+
 // MAP
-var map = L.map('map').setView([36.434, 28.217], 11);
+var map = L.map('map').setView([36.434,28.217],11);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-  attribution:''
+attribution:''
 }).addTo(map);
 
-// PLACES
-function marker(name,lat,lng){
-  L.marker([lat,lng]).addTo(map).bindPopup(name);
-}
+// RENDER LIST + PINS AUTOMATICALLY
+const list = document.getElementById("list");
 
-marker("Elli Beach",36.4519,28.2220);
-marker("Anthony Quinn",36.3456,28.2312);
-marker("Gyros Faliraki",36.3398,28.1996);
-marker("Sea View Taverna",36.2200,28.1500);
+places.forEach(p=>{
 
-// OPEN PLACE
-function openPlace(title,desc,images,lat,lng){
+// CARD
+list.innerHTML += `
+<div class="card" onclick="openPlace('${p.name}',\`${p.desc}\`,${JSON.stringify(p.img)},${p.lat},${p.lng},'${p.price}','${p.cat}')">
+<img src="${p.img[0]}">
+<div class="card-content">
+<h3>${p.name}</h3>
+<p>${p.desc}</p>
+<span class="tag">${p.cat}</span>
+<p class="tag">${p.price}</p>
+</div>
+</div>
+`;
 
-  document.getElementById("modal").style.display="flex";
-  document.getElementById("title").innerText=title;
-  document.getElementById("desc").innerText=desc;
+// MAP PIN
+L.marker([p.lat,p.lng]).addTo(map).bindPopup(p.name);
 
-  document.getElementById("mainimg").src=images[0];
+});
 
-  let gal = document.getElementById("gallery");
-  gal.innerHTML="";
+function openPlace(name,desc,img,lat,lng,price,cat){
 
-  images.forEach(img=>{
-    gal.innerHTML += `<img src="${img}">`;
-  });
+document.getElementById("modal").style.display="flex";
+document.getElementById("title").innerText=name;
+document.getElementById("desc").innerText=desc;
+document.getElementById("meta").innerText=`${cat} • ${price}`;
 
-  document.getElementById("maps").href=
-  `https://www.google.com/maps?q=${lat},${lng}`;
+document.getElementById("mainimg").src=img[0];
+
+let g=document.getElementById("gallery");
+g.innerHTML="";
+img.forEach(i=>{
+g.innerHTML+=`<img src="${i}">`;
+});
+
+document.getElementById("maps").href=
+`https://www.google.com/maps?q=${lat},${lng}`;
+
 }
 
 function closeModal(){
-  document.getElementById("modal").style.display="none";
+document.getElementById("modal").style.display="none";
 }
 
 </script>
