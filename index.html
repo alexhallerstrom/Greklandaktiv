@@ -3,184 +3,213 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rhodos Guide – Faliraki</title>
+<title>Rhodos Guide</title>
+
+<!-- Google Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f7f3ea;
-  color: #222;
+:root{
+  --blue:#1e88e5;
+  --blue2:#64b5f6;
+  --sand:#f7f3ea;
+  --card:#ffffff;
+  --text:#1b1b1b;
 }
 
-header {
-  background: linear-gradient(120deg, #1e88e5, #64b5f6);
-  color: white;
-  padding: 20px;
-  text-align: center;
+*{
+  box-sizing:border-box;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 26px;
+body{
+  margin:0;
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(180deg, var(--sand), #ffffff);
+  color:var(--text);
 }
 
-nav {
-  margin-top: 10px;
+/* HEADER */
+header{
+  background: linear-gradient(135deg, var(--blue), var(--blue2));
+  color:white;
+  padding:22px 18px;
+  text-align:center;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 10px;
-  font-weight: bold;
+header h1{
+  margin:0;
+  font-size:22px;
+  font-weight:700;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+header p{
+  margin:5px 0 0;
+  opacity:0.9;
+  font-size:13px;
 }
 
-section {
-  margin-bottom: 40px;
+/* CONTAINER */
+.container{
+  padding:16px;
+  max-width:900px;
+  margin:auto;
+  padding-bottom:90px;
 }
 
-h2 {
-  border-left: 5px solid #1e88e5;
-  padding-left: 10px;
+/* SECTION TITLE */
+h2{
+  font-size:16px;
+  margin:20px 0 10px;
+  padding-left:10px;
+  border-left:4px solid var(--blue);
 }
 
-.card {
-  background: white;
-  padding: 15px;
-  margin: 12px 0;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+/* CARD */
+.card{
+  background:var(--card);
+  padding:14px;
+  margin-bottom:12px;
+  border-radius:16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.06);
+  transition:0.2s;
 }
 
-.tag {
-  display: inline-block;
-  padding: 4px 8px;
-  background: #e3f2fd;
-  border-radius: 8px;
-  font-size: 12px;
-  margin-top: 5px;
+.card:hover{
+  transform:scale(1.02);
 }
 
-.price {
-  font-weight: bold;
-  color: #2e7d32;
+.card h3{
+  margin:0 0 6px;
+  font-size:16px;
 }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 12px;
-  color: #666;
+.card p{
+  margin:5px 0;
+  font-size:13px;
+  opacity:0.85;
+}
+
+.tag{
+  display:inline-block;
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#e3f2fd;
+  margin-top:8px;
+}
+
+.price{
+  font-weight:600;
+  color:#2e7d32;
+  margin-top:6px;
+  font-size:13px;
+}
+
+/* BOTTOM NAV (APP FEEL) */
+.navbar{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  box-shadow:0 -5px 20px rgba(0,0,0,0.08);
+  border-top-left-radius:18px;
+  border-top-right-radius:18px;
+}
+
+.navbar a{
+  text-decoration:none;
+  color:#444;
+  font-size:12px;
+  text-align:center;
+}
+
+.navbar a span{
+  display:block;
+  font-size:18px;
+}
+
+/* smooth scroll */
+html{
+  scroll-behavior:smooth;
 }
 </style>
-
 </head>
 
 <body>
 
 <header>
   <h1>🌴 Rhodos Guide</h1>
-  <p>Aquarium View Hotel – Faliraki</p>
-
-  <nav>
-    <a href="#min0">0–10 min</a>
-    <a href="#min10">10–20 min</a>
-    <a href="#min20">20–60 min</a>
-  </nav>
+  <p>Din reseapp för Faliraki & Rhodos</p>
 </header>
 
 <div class="container">
 
-<!-- 0–10 min -->
-<section id="min0">
-  <h2>🚶 0–10 minuter</h2>
+<section id="start">
+  <h2>🔥 Nära dig</h2>
 
   <div class="card">
     <h3>Faliraki Beach</h3>
-    <span class="tag">🏖️ Strand</span>
-    <p>Lång sandstrand precis vid hotellet med klart vatten och beach bars.</p>
-    <p class="price">💰 Gratis (solstol extra)</p>
+    <span class="tag">🏖 Strand</span>
+    <p>Stor strand med kristallklart vatten och beach clubs.</p>
+    <p class="price">💰 Gratis</p>
   </div>
 
   <div class="card">
-    <h3>AquaWorld Aquarium</h3>
-    <span class="tag">🐠 Kultur</span>
-    <p>Litet akvarium med räddade havsdjur och sköldpaddor.</p>
-    <p class="price">💰 ca 5–10 €</p>
-  </div>
-
-  <div class="card">
-    <h3>Faliraki Bar Street</h3>
-    <span class="tag">🍹 Nattliv</span>
-    <p>Barer, musik och cocktails – perfekt kvällspromenad.</p>
-    <p class="price">💰 Gratis att gå runt</p>
+    <h3>AquaWorld</h3>
+    <span class="tag">🐠 Aktivitet</span>
+    <p>Litet akvarium med havsdjur och sköldpaddor.</p>
+    <p class="price">💰 5–10 €</p>
   </div>
 </section>
 
-<!-- 10–20 min -->
-<section id="min10">
-  <h2>🚕 10–20 minuter</h2>
-
-  <div class="card">
-    <h3>Kathara Beach</h3>
-    <span class="tag">🏖️ Strand</span>
-    <p>Lugn strand perfekt för snorkling och avkoppling.</p>
-    <p class="price">💰 Gratis / billigt</p>
-  </div>
+<section id="strander">
+  <h2>🏖 Stränder</h2>
 
   <div class="card">
     <h3>Anthony Quinn Bay</h3>
-    <span class="tag">🌊 Natur</span>
-    <p>En av Rhodos mest kända vikar med kristallklart vatten.</p>
-    <p class="price">💰 Gratis</p>
-  </div>
-</section>
-
-<!-- 20–60 min -->
-<section id="min20">
-  <h2>🚗 20–60 minuter</h2>
-
-  <div class="card">
-    <h3>Kallithea Springs</h3>
-    <span class="tag">🏛️ Kultur</span>
-    <p>Historisk spa-plats med vackra byggnader och badvikar.</p>
-    <p class="price">💰 ca 5 €</p>
-  </div>
-
-  <div class="card">
-    <h3>Rhodos Gamla Stan</h3>
-    <span class="tag">🏛️ Kultur</span>
-    <p>Medeltida stad full av gränder, mat och shopping.</p>
+    <p>En av Greklands klaraste badvikar.</p>
     <p class="price">💰 Gratis</p>
   </div>
 
   <div class="card">
     <h3>Tsambika Beach</h3>
-    <span class="tag">🏖️ Strand</span>
-    <p>Stor gyllene strand med turkost vatten.</p>
-    <p class="price">💰 10–25 € solstolar</p>
+    <p>Lång sandstrand med turkost vatten.</p>
+    <p class="price">💰 10–25 € solstol</p>
+  </div>
+</section>
+
+<section id="kultur">
+  <h2>🏛 Kultur</h2>
+
+  <div class="card">
+    <h3>Rhodos Old Town</h3>
+    <p>Medeltida stad med gränder och restauranger.</p>
+    <p class="price">💰 Gratis</p>
   </div>
 
   <div class="card">
-    <h3>Lindos & Akropolis</h3>
-    <span class="tag">🏛️ Kultur</span>
-    <p>Vit by med utsikt och antik akropolis på klippa.</p>
-    <p class="price">💰 ca 12 €</p>
+    <h3>Lindos</h3>
+    <p>Vit by med utsikt över havet och akropolis.</p>
+    <p class="price">💰 12 €</p>
   </div>
 </section>
 
 </div>
 
-<footer>
-  🌴 Rhodos Guide – gjord för din resa
-</footer>
+<!-- APP NAV -->
+<div class="navbar">
+  <a href="#start"><span>🏠</span>Hem</a>
+  <a href="#strander"><span>🏖</span>Stränder</a>
+  <a href="#kultur"><span>🏛</span>Kultur</a>
+</div>
 
 </body>
 </html>
