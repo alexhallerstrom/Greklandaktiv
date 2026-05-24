@@ -3,166 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rhodos Travel App Pro</title>
+<title>Rhodos Travel App</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
-:root{
-  --bg:#f6f7fb;
-  --card:#ffffff;
-  --text:#111827;
-  --muted:#6b7280;
-  --blue:#2563eb;
-  --accent:#38bdf8;
-}
-
-/* DARK MODE */
-body.dark{
-  --bg:#0f172a;
-  --card:#1e293b;
-  --text:#f8fafc;
-  --muted:#94a3b8;
-}
-
-*{box-sizing:border-box;}
-
 body{
   margin:0;
   font-family:Inter,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  transition:0.3s;
-}
-
-/* HEADER */
-header{
-  background:linear-gradient(135deg,#2563eb,#38bdf8);
+  background:#0b1220;
   color:white;
-  padding:24px;
+}
+
+header{
+  padding:18px;
   text-align:center;
-  border-bottom-left-radius:22px;
-  border-bottom-right-radius:22px;
+  background:linear-gradient(135deg,#2563eb,#38bdf8);
 }
 
-header h1{margin:0;font-size:22px;}
-header p{margin-top:6px;opacity:.9;font-size:13px}
-
-/* TOP ACTIONS */
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  padding:10px 14px;
+#map{
+  height:40vh;
+  width:100%;
 }
 
-.topbar button{
-  border:none;
-  padding:8px 12px;
-  border-radius:10px;
-  background:var(--card);
-  color:var(--text);
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
-  cursor:pointer;
-}
-
-/* MENU */
-.menu{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  padding:14px;
-}
-
-.menu button{
-  padding:14px;
-  border:none;
-  border-radius:14px;
-  background:var(--card);
-  color:var(--text);
-  box-shadow:0 8px 20px rgba(0,0,0,0.06);
-  font-weight:600;
-  cursor:pointer;
-}
-
-/* PAGE */
-.page{
-  display:none;
-  padding:14px;
+.container{
+  padding:12px;
   max-width:900px;
   margin:auto;
-  padding-bottom:90px;
 }
 
-.active{display:block;}
-
-h2{
-  margin:10px 0;
-  font-size:18px;
-}
-
-/* CARD */
+/* CARDS */
 .card{
-  background:var(--card);
-  border-radius:18px;
-  margin-bottom:14px;
+  background:#111a2e;
+  border-radius:16px;
   overflow:hidden;
-  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+  margin-bottom:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:scale(1.02);
 }
 
 .card img{
   width:100%;
-  height:160px;
+  height:150px;
   object-fit:cover;
 }
 
 .card-content{
-  padding:14px;
-}
-
-.card p{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.4;
+  padding:12px;
 }
 
 .price{
   color:#22c55e;
   font-weight:600;
-}
-
-/* CHAT */
-.chatbox{
-  background:var(--card);
-  padding:12px;
-  border-radius:16px;
-  box-shadow:0 10px 20px rgba(0,0,0,0.06);
-}
-
-.chatlog{
-  height:200px;
-  overflow:auto;
   font-size:13px;
-  margin-bottom:10px;
 }
 
-input{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #ccc;
-}
-
-/* NAV */
-.nav{
+/* MODAL */
+.modal{
   position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:var(--card);
-  display:flex;
-  justify-content:space-around;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.modal-box{
+  width:92%;
+  max-width:500px;
+  background:#111a2e;
+  border-radius:16px;
+  overflow:hidden;
+  animation:pop 0.25s ease;
+}
+
+@keyframes pop{
+  from{transform:scale(0.9);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+.modal-box img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+
+.modal-body{
+  padding:12px;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:6px;
+  margin:10px 0;
+}
+
+.gallery img{
+  width:100%;
+  height:90px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+.btn{
+  display:inline-block;
   padding:10px;
-  box-shadow:0 -10px 25px rgba(0,0,0,0.08);
+  background:#2563eb;
+  color:white;
+  border-radius:10px;
+  text-decoration:none;
+  margin-top:8px;
+  font-size:13px;
+}
+
+.close{
+  position:absolute;
+  top:15px;
+  right:20px;
+  font-size:22px;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -170,156 +136,129 @@ input{
 <body>
 
 <header>
-  <h1>🌴 Rhodos Travel App PRO</h1>
-  <p>Din smarta reseassistent</p>
+<h2>🌴 Rhodos Travel App</h2>
+<p>Karta + klickbara platser + detaljer</p>
 </header>
 
-<div class="topbar">
-  <button onclick="toggleDark()">🌙 Dark mode</button>
-  <button onclick="show('ai')">🧠 AI Assist</button>
-</div>
+<div id="map"></div>
 
-<!-- MENU -->
-<div class="menu">
-  <button onclick="show('home')">🏠 Hem</button>
-  <button onclick="show('beach')">🏖 Stränder</button>
-  <button onclick="show('food')">🍝 Mat</button>
-  <button onclick="show('bars')">🍹 Barer</button>
-</div>
+<div class="container">
 
-<!-- HOME -->
-<div id="home" class="page active">
-<h2>🌴 Välkommen till Rhodos</h2>
+<h3>🏖 Stränder</h3>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80">
+<div class="card" onclick="openPlace('Elli Beach','Central strand i Rhodos stad',[
+'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80',
+'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80'
+],36.4519,28.2220)">
+<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80">
 <div class="card-content">
-<h3>Faliraki Beach</h3>
-<p>En av Rhodos mest populära stränder. Lång sandstrand, klart vatten och många beach bars.</p>
-<p class="price">💰 Gratis</p>
+<h3>Elli Beach</h3>
+<p>Rhodos stad • strand + barer</p>
 </div>
 </div>
 
-</div>
-
-<!-- BEACH -->
-<div id="beach" class="page">
-<h2>🏖 Stränder</h2>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1400&q=80">
+<div class="card" onclick="openPlace('Anthony Quinn Bay','Snorkling och klippor',[
+'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80',
+'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1200&q=80'
+],36.3456,28.2312)">
+<img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80">
 <div class="card-content">
 <h3>Anthony Quinn Bay</h3>
-<p>En dramatisk vik med turkost vatten, perfekt för snorkling och bilder.</p>
+<p>Snorkling paradis</p>
 </div>
 </div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80">
+<h3>🍝 Restauranger</h3>
+
+<div class="card" onclick="openPlace('Gyros Faliraki','Billig street food',[
+'https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=1200&q=80',
+'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1200&q=80',
+'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80'
+],36.3398,28.1996)">
+<img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=1200&q=80">
 <div class="card-content">
-<h3>Tsambika Beach</h3>
-<p>Lång gyllene sandstrand med lugnt vatten och beach clubs.</p>
+<h3>Gyros Faliraki</h3>
+<p>3–6€ street food</p>
 </div>
 </div>
 
-</div>
-
-<!-- FOOD -->
-<div id="food" class="page">
-<h2>🍝 Restauranger</h2>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=1400&q=80">
-<div class="card-content">
-<h3>Gyros Street Food</h3>
-<p>Snabb, billig och autentisk grekisk street food nära Faliraki.</p>
-<p class="price">💰 3–6€</p>
-</div>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1541542684-4a1f7c0a3c8d?auto=format&fit=crop&w=1400&q=80">
+<div class="card" onclick="openPlace('Sea View Taverna','Havsutsikt & grekisk mat',[
+'https://images.unsplash.com/photo-1541542684-4a1f7c0a3c8d?auto=format&fit=crop&w=1200&q=80',
+'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80',
+'https://images.unsplash.com/photo-1555992336-03a23c8b3d74?auto=format&fit=crop&w=1200&q=80'
+],36.2200,28.1500)">
+<img src="https://images.unsplash.com/photo-1541542684-4a1f7c0a3c8d?auto=format&fit=crop&w=1200&q=80">
 <div class="card-content">
 <h3>Sea View Taverna</h3>
-<p>Romantisk restaurang med havsutsikt och klassisk grekisk mat.</p>
-<p class="price">💰 10–25€</p>
+<p>Romantiskt middag</p>
 </div>
 </div>
 
 </div>
 
-<!-- BARS -->
-<div id="bars" class="page">
-<h2>🍹 Barer</h2>
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-box">
+<div class="close" onclick="closeModal()">✖</div>
+<img id="mainimg">
+<div class="modal-body">
+<h2 id="title"></h2>
+<p id="desc"></p>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1525268323446-0505b6fe7778?auto=format&fit=crop&w=1400&q=80">
-<div class="card-content">
-<h3>Bar Street Faliraki</h3>
-<p>Nattliv, musik och billiga drinkar – perfekt partyområde.</p>
-</div>
-</div>
+<div class="gallery" id="gallery"></div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?auto=format&fit=crop&w=1400&q=80">
-<div class="card-content">
-<h3>Sunset Beach Bar</h3>
-<p>Chill cocktails vid solnedgången med havsutsikt.</p>
+<a class="btn" id="maps">Öppna i Google Maps</a>
+</div>
 </div>
 </div>
 
-</div>
-
-<!-- AI -->
-<div id="ai" class="page">
-<h2>🧠 AI Reseguide</h2>
-
-<div class="chatbox">
-<div class="chatlog" id="chatlog">
-<p><b>AI:</b> Hej! Fråga mig vad du vill om Rhodos 🌴</p>
-</div>
-
-<input id="msg" placeholder="Fråga t.ex. bästa stranden?" onkeydown="if(event.key==='Enter')askAI()">
-</div>
-</div>
-
-<!-- NAV -->
-<div class="nav">
-<button onclick="show('home')">🏠</button>
-<button onclick="show('beach')">🏖</button>
-<button onclick="show('food')">🍝</button>
-<button onclick="show('bars')">🍹</button>
-<button onclick="show('ai')">🧠</button>
-</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
-function show(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+// MAP
+var map = L.map('map').setView([36.434, 28.217], 11);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  attribution:''
+}).addTo(map);
+
+// PLACES
+function marker(name,lat,lng){
+  L.marker([lat,lng]).addTo(map).bindPopup(name);
 }
 
-function toggleDark(){
-  document.body.classList.toggle('dark');
+marker("Elli Beach",36.4519,28.2220);
+marker("Anthony Quinn",36.3456,28.2312);
+marker("Gyros Faliraki",36.3398,28.1996);
+marker("Sea View Taverna",36.2200,28.1500);
+
+// OPEN PLACE
+function openPlace(title,desc,images,lat,lng){
+
+  document.getElementById("modal").style.display="flex";
+  document.getElementById("title").innerText=title;
+  document.getElementById("desc").innerText=desc;
+
+  document.getElementById("mainimg").src=images[0];
+
+  let gal = document.getElementById("gallery");
+  gal.innerHTML="";
+
+  images.forEach(img=>{
+    gal.innerHTML += `<img src="${img}">`;
+  });
+
+  document.getElementById("maps").href=
+  `https://www.google.com/maps?q=${lat},${lng}`;
 }
 
-/* SIMPLE AI (RULE BASED) */
-function askAI(){
-  let input = document.getElementById("msg");
-  let text = input.value.toLowerCase();
-  let chat = document.getElementById("chatlog");
-
-  let reply = "Jag kan hjälpa dig med stränder, mat och barer på Rhodos 🌴";
-
-  if(text.includes("strand")) reply = "Bästa stranden: Anthony Quinn Bay 🏖 eller Tsambika för chill.";
-  if(text.includes("mat")) reply = "Ät gyros för 3–6€ eller taverna med havsutsikt 🍝";
-  if(text.includes("bar")) reply = "Bar Street = party 🍹 eller Sunset Bar för chill vibes.";
-  if(text.includes("vad")) reply = "Jag rekommenderar en båttur + sunset i Lindos 🌅";
-
-  chat.innerHTML += `<p><b>Du:</b> ${input.value}</p>`;
-  chat.innerHTML += `<p><b>AI:</b> ${reply}</p>`;
-  input.value="";
+function closeModal(){
+  document.getElementById("modal").style.display="none";
 }
+
 </script>
 
 </body>
