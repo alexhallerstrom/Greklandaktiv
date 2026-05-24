@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rhodos Ultra Travel App</title>
+<title>Rhodos Travel App Ultra</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -17,30 +17,41 @@ body{
 }
 
 header{
-  padding:18px;
+  padding:16px;
   text-align:center;
   background:linear-gradient(135deg,#2563eb,#38bdf8);
 }
 
-/* MAP */
-#map{
-  height:40vh;
-  width:100%;
-}
+#map{height:32vh;}
 
-/* GRID */
 .container{
   padding:12px;
   max-width:900px;
   margin:auto;
 }
 
-.section-title{
-  margin:14px 0 8px;
-  opacity:.9;
+/* MODE BAR */
+.filters{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:10px;
 }
 
-/* CARD */
+.filters button{
+  padding:8px 12px;
+  border:none;
+  border-radius:999px;
+  background:#111a2e;
+  color:white;
+  cursor:pointer;
+}
+
+.filters button.active{
+  background:#2563eb;
+}
+
+/* CARDS */
 .card{
   background:#111a2e;
   border-radius:16px;
@@ -48,26 +59,22 @@ header{
   margin-bottom:12px;
   cursor:pointer;
   box-shadow:0 10px 25px rgba(0,0,0,0.3);
-  transition:0.2s;
 }
-
-.card:hover{transform:scale(1.02);}
 
 .card img{
   width:100%;
-  height:150px;
+  height:140px;
   object-fit:cover;
 }
 
 .card-content{padding:12px;}
 
 .tag{
-  display:inline-block;
-  padding:4px 8px;
-  background:#1e40af;
-  border-radius:999px;
   font-size:11px;
-  margin-top:6px;
+  background:#1e40af;
+  padding:4px 8px;
+  border-radius:999px;
+  margin-right:6px;
 }
 
 /* MODAL */
@@ -87,12 +94,6 @@ header{
   background:#111a2e;
   border-radius:16px;
   overflow:hidden;
-  animation:pop .2s ease;
-}
-
-@keyframes pop{
-  from{transform:scale(.9);opacity:0}
-  to{transform:scale(1);opacity:1}
 }
 
 .modal img{
@@ -101,9 +102,7 @@ header{
   object-fit:cover;
 }
 
-.modal-body{
-  padding:12px;
-}
+.modal-body{padding:12px;}
 
 .gallery{
   display:grid;
@@ -115,25 +114,38 @@ header{
 .gallery img{
   width:100%;
   height:90px;
-  object-fit:cover;
   border-radius:8px;
 }
 
+/* AI */
+.ai{
+  padding:12px;
+}
+
+.chat{
+  background:#111a2e;
+  height:120px;
+  overflow:auto;
+  padding:10px;
+  border-radius:10px;
+  font-size:12px;
+}
+
+.ai input{
+  width:100%;
+  padding:10px;
+  margin-top:8px;
+  border:none;
+  border-radius:10px;
+}
+
+/* BUTTONS */
 .btn{
-  display:inline-block;
-  margin-top:10px;
   padding:10px;
   background:#2563eb;
   color:white;
+  border:none;
   border-radius:10px;
-  text-decoration:none;
-}
-
-.close{
-  position:absolute;
-  right:20px;
-  top:15px;
-  font-size:20px;
   cursor:pointer;
 }
 </style>
@@ -142,35 +154,49 @@ header{
 <body>
 
 <header>
-<h2>🌍 Rhodos Ultra Travel App</h2>
-<p>Klicka på allt → full info + karta + bilder</p>
+<h2>🌍 Rhodos Travel Ultra</h2>
+<p>Map + Filter + Swipe + AI + Favorites</p>
 </header>
 
 <div id="map"></div>
 
+<div class="filters">
+<button onclick="setMode('browse')">🗺 Browse</button>
+<button onclick="setMode('swipe')">📱 Swipe</button>
+<button onclick="setMode('ai')">🧠 AI</button>
+
+<button onclick="setFilter('all')">Alla</button>
+<button onclick="setFilter('strand')">Stränder</button>
+<button onclick="setFilter('mat')">Mat</button>
+<button onclick="setFilter('bar')">Barer</button>
+<button onclick="setFilter('aktivitet')">Aktiviteter</button>
+
+<button onclick="sortByPrice()">💰 Billigast</button>
+</div>
+
 <div class="container">
 
-<h3 class="section-title">🔥 Platser nära dig</h3>
-
 <div id="list"></div>
+
+<!-- AI -->
+<div class="ai" id="aiBox" style="display:none;">
+<h3>🧠 AI Assistent</h3>
+<div class="chat" id="chat"></div>
+<input id="aiInput" placeholder="Fråga t.ex. bästa strand?" onkeydown="if(event.key==='Enter')askAI()">
+</div>
 
 </div>
 
 <!-- MODAL -->
 <div class="modal" id="modal">
 <div class="modal-box">
-<div class="close" onclick="closeModal()">✖</div>
-
 <img id="mainimg">
-
 <div class="modal-body">
 <h2 id="title"></h2>
 <p id="desc"></p>
 <p id="meta"></p>
-
 <div class="gallery" id="gallery"></div>
-
-<a class="btn" id="maps" target="_blank">📍 Öppna i Google Maps</a>
+<button class="btn" id="fav">❤️ Spara</button>
 </div>
 </div>
 </div>
@@ -179,113 +205,150 @@ header{
 
 <script>
 
-const places = [
-{
-name:"Elli Beach",
-desc:"Central strand i Rhodos stad med barer och solstolar",
-lat:36.4519,lng:28.2220,
-price:"Gratis / 10–20€ solstol",
-cat:"Strand",
-img:[
-"https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-"https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
-"https://images.unsplash.com/photo-1501785888041-af3ef285b470"
-]
-},
+let mode="browse";
+let filter="all";
+let swipeIndex=0;
+let favorites=JSON.parse(localStorage.getItem("fav")||"[]");
 
-{
-name:"Anthony Quinn Bay",
-desc:"Snorkling paradis med turkost vatten och klippor",
-lat:36.3456,lng:28.2312,
-price:"Gratis",
-cat:"Strand",
-img:[
-"https://images.unsplash.com/photo-1500375592092-40eb2168fd21",
-"https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-"https://images.unsplash.com/photo-1470770903676-69b98201ea1c"
-]
-},
+const center=[36.434,28.217];
 
-{
-name:"Gyros Faliraki",
-desc:"Billig och autentisk grekisk street food",
-lat:36.3398,lng:28.1996,
-price:"3–6€",
-cat:"Mat",
-img:[
-"https://images.unsplash.com/photo-1600891964092-4316c288032e",
-"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38",
-"https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
-]
-},
+const places=[
+{name:"Elli Beach",cat:"strand",price:15,lat:36.4519,lng:28.2220,
+desc:"Strand i Rhodos stad",
+img:["https://images.unsplash.com/photo-1507525428034-b723cf961d3e","https://images.unsplash.com/photo-1500375592092-40eb2168fd21","https://images.unsplash.com/photo-1501785888041-af3ef285b470"]},
 
-{
-name:"Sea View Taverna",
-desc:"Romantisk middag med utsikt över havet",
-lat:36.2200,lng:28.1500,
-price:"10–25€",
-cat:"Restaurang",
-img:[
-"https://images.unsplash.com/photo-1541542684-4a1f7c0a3c8d",
-"https://images.unsplash.com/photo-1414235077428-338989a2e8c0",
-"https://images.unsplash.com/photo-1555992336-03a23c8b3d74"
-]
-}
+{name:"Anthony Quinn Bay",cat:"strand",price:0,lat:36.3456,lng:28.2312,
+desc:"Snorkling paradis",
+img:["https://images.unsplash.com/photo-1500375592092-40eb2168fd21","https://images.unsplash.com/photo-1507525428034-b723cf961d3e","https://images.unsplash.com/photo-1470770903676-rocks"]},
+
+{name:"Gyros Faliraki",cat:"mat",price:4,lat:36.3398,lng:28.1996,
+desc:"Billig mat",
+img:["https://images.unsplash.com/photo-1600891964092-4316c288032e","https://images.unsplash.com/photo-1565299624946-b28f40a0ae38","https://images.unsplash.com/photo-1546069901-ba9599a7e63c"]},
+
+{name:"Sunset Bar",cat:"bar",price:10,lat:36.25,lng:28.12,
+desc:"Cocktails + solnedgång",
+img:["https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6","https://images.unsplash.com/photo-1516997121675-4c2d1684aa3e","https://images.unsplash.com/photo-1525268323446-0505b6fe7778"]},
+
+{name:"Old Town Walk",cat:"aktivitet",price:0,lat:36.4420,lng:28.2278,
+desc:"Historisk stad",
+img:["https://images.unsplash.com/photo-1501785888041-af3ef285b470","https://images.unsplash.com/photo-1470770903676-rocks","https://images.unsplash.com/photo-1499856871958"]},
 ];
 
 // MAP
-var map = L.map('map').setView([36.434,28.217],11);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-attribution:''
-}).addTo(map);
-
-// RENDER LIST + PINS AUTOMATICALLY
-const list = document.getElementById("list");
+let map=L.map('map').setView(center,11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 places.forEach(p=>{
+L.marker([p.lat,p.lng]).addTo(map).bindPopup(p.name);
+});
 
-// CARD
-list.innerHTML += `
-<div class="card" onclick="openPlace('${p.name}',\`${p.desc}\`,${JSON.stringify(p.img)},${p.lat},${p.lng},'${p.price}','${p.cat}')">
+// RENDER
+function render(){
+if(mode!=="browse") return;
+
+let list=document.getElementById("list");
+list.innerHTML="";
+
+places
+.filter(p=>filter==="all"?true:p.cat===filter)
+.forEach(p=>{
+
+list.innerHTML+=`
+<div class="card" onclick="openPlace('${p.name}',\`${p.desc}\`,${JSON.stringify(p.img)},${p.price},'${p.cat}',${p.lat},${p.lng})">
 <img src="${p.img[0]}">
 <div class="card-content">
 <h3>${p.name}</h3>
 <p>${p.desc}</p>
 <span class="tag">${p.cat}</span>
-<p class="tag">${p.price}</p>
+<span class="tag">${p.price}€</span>
 </div>
 </div>
 `;
-
-// MAP PIN
-L.marker([p.lat,p.lng]).addTo(map).bindPopup(p.name);
-
 });
+}
 
-function openPlace(name,desc,img,lat,lng,price,cat){
-
+// MODAL
+function openPlace(name,desc,img,price,cat,lat,lng){
 document.getElementById("modal").style.display="flex";
 document.getElementById("title").innerText=name;
 document.getElementById("desc").innerText=desc;
-document.getElementById("meta").innerText=`${cat} • ${price}`;
+document.getElementById("meta").innerText=`${cat} • ${price}€`;
 
 document.getElementById("mainimg").src=img[0];
 
 let g=document.getElementById("gallery");
 g.innerHTML="";
-img.forEach(i=>{
-g.innerHTML+=`<img src="${i}">`;
-});
+img.forEach(i=>g.innerHTML+=`<img src="${i}">`);
 
-document.getElementById("maps").href=
-`https://www.google.com/maps?q=${lat},${lng}`;
-
+document.getElementById("fav").onclick=()=>{
+favorites.push(name);
+localStorage.setItem("fav",JSON.stringify(favorites));
+alert("Sparad ❤️");
+};
 }
 
-function closeModal(){
-document.getElementById("modal").style.display="none";
+// FILTER
+function setFilter(f){
+filter=f;
+render();
 }
+
+// SORT
+function sortByPrice(){
+places.sort((a,b)=>a.price-b.price);
+render();
+}
+
+// MODE
+function setMode(m){
+mode=m;
+document.getElementById("aiBox").style.display=m==="ai"?"block":"none";
+
+if(m==="browse") render();
+if(m==="swipe") swipeMode();
+}
+
+// SWIPE MODE
+function swipeMode(){
+let list=document.getElementById("list");
+let p=places[swipeIndex%places.length];
+
+list.innerHTML=`
+<div class="card">
+<img src="${p.img[0]}">
+<div class="card-content">
+<h3>${p.name}</h3>
+<p>${p.desc}</p>
+<button class="btn" onclick="swipeNext()">Nästa ➡️</button>
+<button class="btn" onclick="alert('❤️ sparad')">Like</button>
+</div>
+</div>
+`;
+}
+
+function swipeNext(){
+swipeIndex++;
+swipeMode();
+}
+
+// AI (enkel men fungerande)
+function askAI(){
+let input=document.getElementById("aiInput").value;
+let chat=document.getElementById("chat");
+
+let reply="Jag kan hjälpa dig med stränder, mat och barer 🌴";
+
+if(input.toLowerCase().includes("strand")) reply="Anthony Quinn eller Elli Beach är bäst 🏖";
+if(input.toLowerCase().includes("billigt")) reply="Gyros Faliraki är billigast 🍝";
+if(input.toLowerCase().includes("bar")) reply="Sunset Bar för kväll 🍹";
+
+chat.innerHTML+=`<div><b>Du:</b> ${input}</div>`;
+chat.innerHTML+=`<div><b>AI:</b> ${reply}</div>`;
+document.getElementById("aiInput").value="";
+}
+
+// INIT
+render();
 
 </script>
 
