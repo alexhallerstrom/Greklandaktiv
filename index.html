@@ -3,200 +3,322 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rhodos Travel App</title>
+<title>Rhodos Travel App Pro</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --blue:#2563eb;
+  --accent:#38bdf8;
+}
+
+/* DARK MODE */
+body.dark{
+  --bg:#0f172a;
+  --card:#1e293b;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+}
+
+*{box-sizing:border-box;}
+
 body{
   margin:0;
   font-family:Inter,sans-serif;
-  background:#f6f7fb;
-  color:#111;
+  background:var(--bg);
+  color:var(--text);
+  transition:0.3s;
 }
 
+/* HEADER */
 header{
-  background:linear-gradient(135deg,#1e88e5,#38bdf8);
+  background:linear-gradient(135deg,#2563eb,#38bdf8);
   color:white;
-  padding:22px;
+  padding:24px;
   text-align:center;
-  border-bottom-left-radius:20px;
-  border-bottom-right-radius:20px;
+  border-bottom-left-radius:22px;
+  border-bottom-right-radius:22px;
 }
 
-.page{display:none;padding:15px;max-width:900px;margin:auto;}
+header h1{margin:0;font-size:22px;}
+header p{margin-top:6px;opacity:.9;font-size:13px}
+
+/* TOP ACTIONS */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 14px;
+}
+
+.topbar button{
+  border:none;
+  padding:8px 12px;
+  border-radius:10px;
+  background:var(--card);
+  color:var(--text);
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
+  cursor:pointer;
+}
+
+/* MENU */
+.menu{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  padding:14px;
+}
+
+.menu button{
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  background:var(--card);
+  color:var(--text);
+  box-shadow:0 8px 20px rgba(0,0,0,0.06);
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* PAGE */
+.page{
+  display:none;
+  padding:14px;
+  max-width:900px;
+  margin:auto;
+  padding-bottom:90px;
+}
+
 .active{display:block;}
 
-.card{
-  background:white;
-  border-radius:16px;
-  overflow:hidden;
-  margin-bottom:12px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.06);
-  cursor:pointer;
-}
-
-.card img{width:100%;height:160px;object-fit:cover;}
-.card-content{padding:12px;}
-
-.btn{
-  display:inline-block;
-  margin-top:8px;
-  padding:10px 12px;
-  background:#1e88e5;
-  color:white;
-  border-radius:10px;
-  text-decoration:none;
-  font-size:12px;
-}
-
-.back{
+h2{
   margin:10px 0;
-  background:white;
-  border:none;
-  padding:10px 14px;
-  border-radius:10px;
-  box-shadow:0 6px 15px rgba(0,0,0,0.08);
-  cursor:pointer;
+  font-size:18px;
 }
 
-/* DETAIL PAGE */
-.detail img{
+/* CARD */
+.card{
+  background:var(--card);
+  border-radius:18px;
+  margin-bottom:14px;
+  overflow:hidden;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.card img{
   width:100%;
+  height:160px;
+  object-fit:cover;
+}
+
+.card-content{
+  padding:14px;
+}
+
+.card p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.4;
+}
+
+.price{
+  color:#22c55e;
+  font-weight:600;
+}
+
+/* CHAT */
+.chatbox{
+  background:var(--card);
+  padding:12px;
   border-radius:16px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.06);
+}
+
+.chatlog{
+  height:200px;
+  overflow:auto;
+  font-size:13px;
   margin-bottom:10px;
 }
 
-.menu-box{
-  background:white;
-  padding:12px;
-  border-radius:14px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
 }
 
-.price{color:green;font-weight:600;}
+/* NAV */
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:var(--card);
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
+  box-shadow:0 -10px 25px rgba(0,0,0,0.08);
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>🌴 Rhodos Travel App</h1>
-  <p>Klicka på en plats för detaljer</p>
+  <h1>🌴 Rhodos Travel App PRO</h1>
+  <p>Din smarta reseassistent</p>
 </header>
 
-<!-- LIST VIEW -->
-<div id="list" class="page active">
+<div class="topbar">
+  <button onclick="toggleDark()">🌙 Dark mode</button>
+  <button onclick="show('ai')">🧠 AI Assist</button>
+</div>
 
+<!-- MENU -->
+<div class="menu">
+  <button onclick="show('home')">🏠 Hem</button>
+  <button onclick="show('beach')">🏖 Stränder</button>
+  <button onclick="show('food')">🍝 Mat</button>
+  <button onclick="show('bars')">🍹 Barer</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+<h2>🌴 Välkommen till Rhodos</h2>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80">
+<div class="card-content">
+<h3>Faliraki Beach</h3>
+<p>En av Rhodos mest populära stränder. Lång sandstrand, klart vatten och många beach bars.</p>
+<p class="price">💰 Gratis</p>
+</div>
+</div>
+
+</div>
+
+<!-- BEACH -->
+<div id="beach" class="page">
 <h2>🏖 Stränder</h2>
 
-<div class="card" onclick="openPage('anthony')">
+<div class="card">
 <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1400&q=80">
 <div class="card-content">
 <h3>Anthony Quinn Bay</h3>
-<p>Kristallklart vatten + snorkling</p>
+<p>En dramatisk vik med turkost vatten, perfekt för snorkling och bilder.</p>
 </div>
 </div>
 
-<div class="card" onclick="openPage('tsambika')">
+<div class="card">
 <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80">
 <div class="card-content">
 <h3>Tsambika Beach</h3>
-<p>Stor strand med beach clubs</p>
+<p>Lång gyllene sandstrand med lugnt vatten och beach clubs.</p>
 </div>
 </div>
 
+</div>
+
+<!-- FOOD -->
+<div id="food" class="page">
 <h2>🍝 Restauranger</h2>
 
-<div class="card" onclick="openPage('gyros')">
+<div class="card">
 <img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=1400&q=80">
 <div class="card-content">
-<h3>Gyros Faliraki</h3>
-<p>Billig street food</p>
+<h3>Gyros Street Food</h3>
+<p>Snabb, billig och autentisk grekisk street food nära Faliraki.</p>
+<p class="price">💰 3–6€</p>
 </div>
 </div>
 
-<div class="card" onclick="openPage('taverna')">
+<div class="card">
 <img src="https://images.unsplash.com/photo-1541542684-4a1f7c0a3c8d?auto=format&fit=crop&w=1400&q=80">
 <div class="card-content">
 <h3>Sea View Taverna</h3>
-<p>Havsutsikt + grekisk mat</p>
-</div>
-</div>
-
-</div>
-
-<!-- DETAILS -->
-
-<div id="anthony" class="page detail">
-<button class="back" onclick="back()">⬅ Tillbaka</button>
-<img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1400&q=80">
-
-<h2>Anthony Quinn Bay</h2>
-<p>En av Rhodos mest kända vikar.</p>
-
-<div class="menu-box">
-<h3>📍 Info</h3>
-<p>Snorkling, klippor, turkost vatten</p>
-<p class="price">💰 Gratis</p>
-<a class="btn" href="https://www.google.com/maps/search/Anthony+Quinn+Bay" target="_blank">Öppna i Maps</a>
-</div>
-</div>
-
-<div id="tsambika" class="page detail">
-<button class="back" onclick="back()">⬅ Tillbaka</button>
-<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80">
-
-<h2>Tsambika Beach</h2>
-
-<div class="menu-box">
-<h3>📍 Info</h3>
-<p>Stor strand, solstolar, barer</p>
+<p>Romantisk restaurang med havsutsikt och klassisk grekisk mat.</p>
 <p class="price">💰 10–25€</p>
 </div>
 </div>
 
-<div id="gyros" class="page detail">
-<button class="back" onclick="back()">⬅ Tillbaka</button>
-<img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?auto=format&fit=crop&w=1400&q=80">
+</div>
 
-<h2>Gyros Faliraki</h2>
+<!-- BARS -->
+<div id="bars" class="page">
+<h2>🍹 Barer</h2>
 
-<div class="menu-box">
-<h3>🍽 Meny</h3>
-<p>Gyros pita – 4€</p>
-<p>Souvlaki – 6€</p>
-<p>Fries + drink – 3€</p>
-
-<p class="price">💰 Billigast i området</p>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1525268323446-0505b6fe7778?auto=format&fit=crop&w=1400&q=80">
+<div class="card-content">
+<h3>Bar Street Faliraki</h3>
+<p>Nattliv, musik och billiga drinkar – perfekt partyområde.</p>
 </div>
 </div>
 
-<div id="taverna" class="page detail">
-<button class="back" onclick="back()">⬅ Tillbaka</button>
-<img src="https://images.unsplash.com/photo-1541542684-4a1f7c0a3c8d?auto=format&fit=crop&w=1400&q=80">
-
-<h2>Sea View Taverna</h2>
-
-<div class="menu-box">
-<h3>🍽 Meny</h3>
-<p>Grillad fisk – 18€</p>
-<p>Moussaka – 12€</p>
-<p>Wine glass – 5€</p>
-
-<p class="price">💰 Medel–dyrt</p>
+<div class="card">
+<img src="https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?auto=format&fit=crop&w=1400&q=80">
+<div class="card-content">
+<h3>Sunset Beach Bar</h3>
+<p>Chill cocktails vid solnedgången med havsutsikt.</p>
 </div>
+</div>
+
+</div>
+
+<!-- AI -->
+<div id="ai" class="page">
+<h2>🧠 AI Reseguide</h2>
+
+<div class="chatbox">
+<div class="chatlog" id="chatlog">
+<p><b>AI:</b> Hej! Fråga mig vad du vill om Rhodos 🌴</p>
+</div>
+
+<input id="msg" placeholder="Fråga t.ex. bästa stranden?" onkeydown="if(event.key==='Enter')askAI()">
+</div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+<button onclick="show('home')">🏠</button>
+<button onclick="show('beach')">🏖</button>
+<button onclick="show('food')">🍝</button>
+<button onclick="show('bars')">🍹</button>
+<button onclick="show('ai')">🧠</button>
 </div>
 
 <script>
-function openPage(id){
+
+function show(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-function back(){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('list').classList.add('active');
+function toggleDark(){
+  document.body.classList.toggle('dark');
+}
+
+/* SIMPLE AI (RULE BASED) */
+function askAI(){
+  let input = document.getElementById("msg");
+  let text = input.value.toLowerCase();
+  let chat = document.getElementById("chatlog");
+
+  let reply = "Jag kan hjälpa dig med stränder, mat och barer på Rhodos 🌴";
+
+  if(text.includes("strand")) reply = "Bästa stranden: Anthony Quinn Bay 🏖 eller Tsambika för chill.";
+  if(text.includes("mat")) reply = "Ät gyros för 3–6€ eller taverna med havsutsikt 🍝";
+  if(text.includes("bar")) reply = "Bar Street = party 🍹 eller Sunset Bar för chill vibes.";
+  if(text.includes("vad")) reply = "Jag rekommenderar en båttur + sunset i Lindos 🌅";
+
+  chat.innerHTML += `<p><b>Du:</b> ${input.value}</p>`;
+  chat.innerHTML += `<p><b>AI:</b> ${reply}</p>`;
+  input.value="";
 }
 </script>
 
