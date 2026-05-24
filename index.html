@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rhodos Travel App</title>
+<title>Rhodos Travel App ULTRA</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -11,7 +11,6 @@
 :root{
   --blue:#1e88e5;
   --sand:#f7f3ea;
-  --card:#fff;
 }
 
 *{box-sizing:border-box;}
@@ -20,23 +19,30 @@ body{
   margin:0;
   font-family:Inter,sans-serif;
   background:linear-gradient(180deg,var(--sand),#fff);
-  color:#222;
 }
 
 /* HEADER */
 header{
   background:linear-gradient(135deg,#1e88e5,#64b5f6);
   color:white;
-  padding:22px;
+  padding:20px;
   text-align:center;
-  border-bottom-left-radius:20px;
-  border-bottom-right-radius:20px;
 }
 
 header h1{margin:0;font-size:22px;}
-header p{margin:5px 0 0;opacity:0.9;font-size:13px;}
+header p{margin:5px 0 0;font-size:13px;opacity:.9}
 
-/* NAV BUTTONS */
+/* WEATHER BOX */
+.weather{
+  margin:15px;
+  background:white;
+  padding:12px;
+  border-radius:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  font-size:13px;
+}
+
+/* MENU */
 .menu{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -45,16 +51,16 @@ header p{margin:5px 0 0;opacity:0.9;font-size:13px;}
 }
 
 .btn{
-  background:white;
-  border:none;
   padding:14px;
+  border:none;
   border-radius:14px;
+  background:white;
   box-shadow:0 6px 15px rgba(0,0,0,0.08);
   font-weight:600;
   cursor:pointer;
 }
 
-/* PAGES */
+/* PAGE */
 .page{
   display:none;
   padding:15px;
@@ -69,20 +75,18 @@ header p{margin:5px 0 0;opacity:0.9;font-size:13px;}
 .card{
   background:white;
   border-radius:16px;
-  margin-bottom:14px;
+  margin-bottom:12px;
   overflow:hidden;
   box-shadow:0 8px 20px rgba(0,0,0,0.06);
 }
 
 .card img{
   width:100%;
-  height:160px;
+  height:150px;
   object-fit:cover;
 }
 
-.card-content{
-  padding:12px;
-}
+.card-content{padding:12px;}
 
 .price{
   color:#2e7d32;
@@ -90,53 +94,71 @@ header p{margin:5px 0 0;opacity:0.9;font-size:13px;}
   font-size:13px;
 }
 
-/* TOP NAV */
-.topnav{
-  display:flex;
-  justify-content:space-around;
-  background:white;
-  padding:10px;
+.tag{
+  font-size:11px;
+  padding:4px 8px;
+  background:#e3f2fd;
+  border-radius:999px;
+  display:inline-block;
+}
+
+/* NAV */
+.nav{
   position:fixed;
   bottom:0;
   left:0;
   right:0;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
   box-shadow:0 -5px 20px rgba(0,0,0,0.08);
 }
 
-.topnav button{
+.nav button{
   border:none;
   background:none;
   font-size:12px;
-  cursor:pointer;
 }
+
+/* TEXT */
+h2{margin-top:10px;}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>🌴 Rhodos Travel App</h1>
-  <p>Faliraki – Aquarium View Hotel</p>
+  <h1>🌴 Rhodos Travel App ULTRA</h1>
+  <p>Faliraki • 1h runt Rhodos</p>
 </header>
 
-<!-- MAIN MENU -->
+<!-- 🌤 WEATHER + UV -->
+<div class="weather">
+  🌤 Väder (Rhodos just nu): ca 24–30°C varmt, soligt <br>
+  ☀️ UV-index: HÖGT (8–10) → använd solkräm SPF 30–50 <br>
+  🌬️ Vind: svag till måttlig havsbris
+</div>
+
+<!-- MENU -->
 <div class="menu">
-  <button class="btn" onclick="showPage('home')">🏠 Hem</button>
-  <button class="btn" onclick="showPage('beach')">🏖 Stränder</button>
-  <button class="btn" onclick="showPage('food')">🍝 Mat</button>
-  <button class="btn" onclick="showPage('bars')">🍹 Barer</button>
-  <button class="btn" onclick="showPage('activity')">🎯 Aktiviteter</button>
+  <button class="btn" onclick="show('home')">🏠 Hem</button>
+  <button class="btn" onclick="show('beach')">🏖 Stränder</button>
+  <button class="btn" onclick="show('food')">🍝 Mat</button>
+  <button class="btn" onclick="show('bars')">🍹 Barer</button>
+  <button class="btn" onclick="show('things')">🎯 Grejer</button>
+  <button class="btn" onclick="show('lux')">💎 Premium</button>
 </div>
 
 <!-- HOME -->
 <div id="home" class="page active">
-  <h2>Nära dig</h2>
+  <h2>Nära Faliraki</h2>
 
   <div class="card">
     <img src="https://source.unsplash.com/800x400/?faliraki,beach">
     <div class="card-content">
       <h3>Faliraki Beach</h3>
-      <p>Stor strand nära hotellet med klart vatten.</p>
+      <p>Perfekt nära hotellet, klart vatten.</p>
       <p class="price">💰 Gratis</p>
     </div>
   </div>
@@ -144,107 +166,173 @@ header p{margin:5px 0 0;opacity:0.9;font-size:13px;}
 
 <!-- BEACH -->
 <div id="beach" class="page">
-  <h2>🏖 Stränder (närmast → finast)</h2>
+<h2>🏖 Stränder (billig → lyx)</h2>
 
-  <div class="card">
-    <img src="https://source.unsplash.com/800x400/?anthony,quinn,bay">
-    <div class="card-content">
-      <h3>Anthony Quinn Bay</h3>
-      <p>Kristallklart vatten, perfekt snorkling.</p>
-      <p class="price">💰 Gratis</p>
-    </div>
-  </div>
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?anthony,quinn,bay">
+<div class="card-content">
+<h3>Anthony Quinn Bay</h3>
+<span class="tag">Top 1</span>
+<p>Snorkling + klippor + kristallvatten</p>
+<p class="price">💰 Gratis</p>
+</div>
+</div>
 
-  <div class="card">
-    <img src="https://source.unsplash.com/800x400/?tsambika,beach,greece">
-    <div class="card-content">
-      <h3>Tsambika Beach</h3>
-      <p>Lång sandstrand med turkost vatten.</p>
-      <p class="price">💰 10–25€ solstol</p>
-    </div>
-  </div>
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?tsambika,beach">
+<div class="card-content">
+<h3>Tsambika Beach</h3>
+<p>Lång sandstrand, beach bars</p>
+<p class="price">💰 10–25€</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?lindos,beach">
+<div class="card-content">
+<h3>Lindos Beach</h3>
+<p>Vackraste utsikten + klart vatten</p>
+<p class="price">💰 15–30€</p>
+</div>
+</div>
+
 </div>
 
 <!-- FOOD -->
 <div id="food" class="page">
-  <h2>🍝 Restauranger (billig → dyr)</h2>
+<h2>🍝 Restauranger (billig → dyr)</h2>
 
-  <div class="card">
-    <img src="https://source.unsplash.com/800x400/?gyros,greek,food">
-    <div class="card-content">
-      <h3>Gyros Street Food</h3>
-      <p>Billig grekisk snabbmat nära Faliraki.</p>
-      <p class="price">💰 3–6€</p>
-    </div>
-  </div>
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?gyros,greek,food">
+<div class="card-content">
+<h3>Gyros Street Faliraki</h3>
+<p>Billigaste maten på ön</p>
+<p class="price">💰 3–6€</p>
+</div>
+</div>
 
-  <div class="card">
-    <img src="https://source.unsplash.com/800x400/?greek,restaurant,sea">
-    <div class="card-content">
-      <h3>Havsnära Taverna</h3>
-      <p>Traditionell mat med havsutsikt.</p>
-      <p class="price">💰 10–25€</p>
-    </div>
-  </div>
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?greek,taverna,sea">
+<div class="card-content">
+<h3>Sunset Taverna</h3>
+<p>Havsutsikt + grekisk mat</p>
+<p class="price">💰 10–25€</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?seafood,restaurant,greece">
+<div class="card-content">
+<h3>Lindos Fine Dining</h3>
+<p>Romantiskt + dyrt + utsikt</p>
+<p class="price">💰 30–80€</p>
+</div>
+</div>
+
 </div>
 
 <!-- BARS -->
 <div id="bars" class="page">
-  <h2>🍹 Barer (billig → premium)</h2>
+<h2>🍹 Barer (billig → premium)</h2>
 
-  <div class="card">
-    <img src="https://source.unsplash.com/800x400/?cocktail,bar,greece">
-    <div class="card-content">
-      <h3>Faliraki Bar Street</h3>
-      <p>Billiga drinkar & nattliv.</p>
-      <p class="price">💰 5–8€</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://source.unsplash.com/800x400/?beach,bar,sunset">
-    <div class="card-content">
-      <h3>Sunset Beach Bar</h3>
-      <p>Drinkar vid solnedgång.</p>
-      <p class="price">💰 10–15€</p>
-    </div>
-  </div>
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?cocktail,bar">
+<div class="card-content">
+<h3>Faliraki Bar Street</h3>
+<p>Billiga drinkar & party</p>
+<p class="price">💰 5–8€</p>
+</div>
 </div>
 
-<!-- ACTIVITIES -->
-<div id="activity" class="page">
-  <h2>🎯 Aktiviteter</h2>
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?beach,bar,sunset">
+<div class="card-content">
+<h3>Sunset Beach Bar</h3>
+<p>Solnedgång + musik</p>
+<p class="price">💰 10–15€</p>
+</div>
+</div>
 
-  <div class="card">
-    <img src="https://source.unsplash.com/800x400/?boat,sea,greek">
-    <div class="card-content">
-      <h3>Båttur runt Rhodos</h3>
-      <p>Snorkling + gömda vikar.</p>
-      <p class="price">💰 25–60€</p>
-    </div>
-  </div>
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?luxury,bar,sea">
+<div class="card-content">
+<h3>Kallithea Luxury Bar</h3>
+<p>Dyrare, bästa utsikten</p>
+<p class="price">💰 15–25€</p>
+</div>
+</div>
 
-  <div class="card">
-    <img src="https://source.unsplash.com/800x400/?old,town,rhodes">
-    <div class="card-content">
-      <h3>Rhodos Old Town</h3>
-      <p>Historisk stad + shopping.</p>
-      <p class="price">💰 Gratis</p>
-    </div>
-  </div>
+</div>
+
+<!-- THINGS -->
+<div id="things" class="page">
+<h2>🎯 Grejer att göra</h2>
+
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?boat,greek,sea">
+<div class="card-content">
+<h3>Båttur runt Rhodos</h3>
+<p>Snorkling + gömda vikar</p>
+<p class="price">💰 25–60€</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?old,town,rhodes">
+<div class="card-content">
+<h3>Rhodos Old Town</h3>
+<p>Shopping + historia</p>
+<p class="price">💰 Gratis</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?monastery,view,greece">
+<div class="card-content">
+<h3>Lindos Akropolis</h3>
+<p>Utsikt över hela ön</p>
+<p class="price">💰 12€</p>
+</div>
+</div>
+
+</div>
+
+<!-- PREMIUM -->
+<div id="lux" class="page">
+<h2>💎 Premium spots</h2>
+
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?luxury,resort,pool">
+<div class="card-content">
+<h3>Beach Clubs VIP</h3>
+<p>Bästa solstolar + cocktails</p>
+<p class="price">💰 20–60€</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://source.unsplash.com/800x400/?sunset,cliff,sea">
+<div class="card-content">
+<h3>Secret Sunset Spots</h3>
+<p>Perfekt för par 🌅</p>
+<p class="price">💰 Gratis</p>
+</div>
+</div>
+
 </div>
 
 <!-- NAV -->
-<div class="topnav">
-  <button onclick="showPage('home')">🏠</button>
-  <button onclick="showPage('beach')">🏖</button>
-  <button onclick="showPage('food')">🍝</button>
-  <button onclick="showPage('bars')">🍹</button>
-  <button onclick="showPage('activity')">🎯</button>
+<div class="nav">
+<button onclick="show('home')">🏠</button>
+<button onclick="show('beach')">🏖</button>
+<button onclick="show('food')">🍝</button>
+<button onclick="show('bars')">🍹</button>
+<button onclick="show('things')">🎯</button>
+<button onclick="show('lux')">💎</button>
 </div>
 
 <script>
-function showPage(id){
+function show(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
